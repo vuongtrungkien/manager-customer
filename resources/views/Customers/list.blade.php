@@ -18,6 +18,7 @@
                     <th scope="col">Tên khách hàng</th>
                     <th scope="col">Ngày Sinh</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Thành Phố</th>
                     <th scope="col">Image</th>
                     <th></th>
                     <th></th>
@@ -25,7 +26,9 @@
                 </thead>
                 <tbody>
                 @if(count($customers) == 0)
-                    <tr><td colspan="4">Không có dữ liệu</td></tr>
+                    <tr>
+                        <td colspan="4">Không có dữ liệu</td>
+                    </tr>
                 @else
                     @foreach($customers as $key => $customer)
                         <tr>
@@ -33,15 +36,23 @@
                             <td>{{ $customer->name }}</td>
                             <td>{{ $customer->dob }}</td>
                             <td>{{ $customer->email }}</td>
-                            <td><img style="width: 200px;height: 200px" src="{{asset('storage/'.$customer->image)}}"></td>
+                            <td>{{ $customer->city->name }}</td>
+                            <td><img style="width: 80px;height: 80px" src="{{asset('storage/'.$customer->image)}}">
+                            </td>
                             <td><a href="{{ route('customers.edit', $customer->id) }}">sửa</a></td>
-                            <td><a href="{{ route('customers.destroy', $customer->id) }}" class="text-danger" onclick="return confirm('Bạn chắc chắn muốn xóa?')">xóa</a></td>
+                            <td><a href="{{ route('customers.destroy', $customer->id) }}" class="text-danger"
+                                   onclick="return confirm('Bạn chắc chắn muốn xóa?')">xóa</a></td>
                         </tr>
                     @endforeach
                 @endif
                 </tbody>
             </table>
             <a class="btn btn-primary" href="{{ route('customers.create') }}">Thêm mới</a>
+        </div>
+        <div class="col-6">
+            <div class="pagination float-right">
+                {{ $customers->appends(request()->query()) }}
+            </div>
         </div>
     </div>
 @endsection

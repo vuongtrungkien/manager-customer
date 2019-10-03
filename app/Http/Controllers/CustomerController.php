@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
 use App\Customer;
+use App\Http\Requests\FormValidationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -10,9 +12,19 @@ use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
 {
+    protected $city;
+    protected $customer;
+
+    public function __construct(City $city, Customer $customer)
+    {
+        $this->city = $city;
+        $this->customer = $customer;
+    }
+
+
     public function index()
     {
-        $customers = Customer::all();
+        $customers = Customer::paginate(5);
         return view('Customers.list', compact('customers'));
     }
 
@@ -24,7 +36,8 @@ class CustomerController extends Controller
 
     public function create()
     {
-        return view('Customers.create');
+        $cities = $this->city->all();
+        return view('Customers.create', compact('cities'));
     }
 
     /**
@@ -32,13 +45,14 @@ class CustomerController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(FormValidationRequest $request)
     {
 
         $customer = new Customer();
         $customer->name = $request->input('name');
         $customer->email = $request->input('email');
         $customer->dob = $request->input('dob');
+        $customer->city_id = $request->input('city_id');
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -62,8 +76,9 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
+        $cities = $this->city->all();
         $customer = Customer::findOrFail($id);
-        return view('Customers.edit', compact('customer'));
+        return view('Customers.edit', compact('customer', 'cities'));
     }
 
     /**
@@ -78,6 +93,7 @@ class CustomerController extends Controller
         $customer->name = $request->input('name');
         $customer->email = $request->input('email');
         $customer->dob = $request->input('dob');
+        $customer->city_id = $request->input('city_id');
 
         if ($request->hasFile('image')) {
             $currentImg = $customer->image;

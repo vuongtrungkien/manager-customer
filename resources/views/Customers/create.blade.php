@@ -12,7 +12,7 @@
                     @csrf
                     <div class="form-group">
                         <label>Tên khách hàng</label>
-                        <input type="text" class="form-control" name="name"  placeholder="Enter name" required>
+                        <input type="text" class="form-control" name="name" placeholder="Enter name" required>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email</label>
@@ -23,8 +23,16 @@
                         <input type="date" class="form-control" name="dob" required>
                     </div>
                     <div class="form-group">
-                        <label >Image</label>
-                        <input type="file" class="form-control" name="image" required>
+                        <label for="exampleInputEmail1">Thành Phố</label>
+                        <select name="city_id" class="form-control">
+                            @foreach($cities as $city)
+                                <option value="{{$city->id}}">{{$city->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <input type="file" class="form-control" name="image">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

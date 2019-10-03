@@ -5,7 +5,8 @@
         <div class="row">
             <div class="col-12"><h1>Chỉnh sửa khách hàng</h1></div>
             <div class="col-12">
-                <form method="post" action="{{ route('customers.update', $customer->id) }}" enctype="multipart/form-data">
+                <form method="post" action="{{ route('customers.update', $customer->id) }}"
+                      enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label>Tên khách hàng</label>
@@ -20,8 +21,25 @@
                         <input type="date" class="form-control" name="dob" value="{{ $customer->dob }}" required>
                     </div>
                     <div class="form-group">
+                        <label for="exampleInputEmail1">Thành Phố</label>
+                        <select name="city_id" class="form-control">
+
+                            @foreach($cities as $city)
+
+                                <option
+                                    @if($customer->city_id == $city->id)
+                                    selected
+                                    @endif
+                                    value="{{$city->id}}">{{$city->name}}</option>
+
+                            @endforeach
+
+
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Image</label>
-                        <input type="file" class="form-control" name="image"  required>
+                        <input type="file" class="form-control" name="image">
                     </div>
                     <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
                     <button class="btn btn-secondary" onclick="window.history.go(-1); return false;">Hủy</button>
